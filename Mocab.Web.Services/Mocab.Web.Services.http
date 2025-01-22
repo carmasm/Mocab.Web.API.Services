@@ -1,0 +1,6 @@
+@Mocab.Web.Services_HostAddress = http://localhost:5296
+
+GET {{Mocab.Web.Services_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

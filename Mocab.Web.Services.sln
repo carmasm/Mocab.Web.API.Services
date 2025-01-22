@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mocab.Web.Services", "Mocab.Web.Services\Mocab.Web.Services.csproj", "{97E966B1-65A6-40FA-B509-A3A5704C5A96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97E966B1-65A6-40FA-B509-A3A5704C5A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E966B1-65A6-40FA-B509-A3A5704C5A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E966B1-65A6-40FA-B509-A3A5704C5A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E966B1-65A6-40FA-B509-A3A5704C5A96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73D022EE-755D-4061-8066-D07506D8F44A}
+	EndGlobalSection
+EndGlobal
