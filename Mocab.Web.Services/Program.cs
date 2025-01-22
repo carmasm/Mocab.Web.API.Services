@@ -43,6 +43,8 @@ app.MapIdentityApi<User>();
 
 app.UseAuthorization();
 
+app.Map("/", () => "Hello World Web API!");
+
 app.MapControllers();
 
 app.Run();
