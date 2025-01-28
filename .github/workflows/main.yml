@@ -22,8 +22,17 @@ jobs:
     - name: Debug - List Files in Workspace
       run: ls -alh
 
-    - name: Build and Push Docker Image
-      run: |
-        cd Mocab.Web.Services  # Navigate to the directory containing the Dockerfile
-        docker build -t cjarmas/mocab-web-services .
-        docker push cjarmas/mocab-web-services
+    #- name: Build and Push Docker Image
+    #  run: |
+    #    cd Mocab.Web.Services  # Navigate to the directory containing the Dockerfile
+    #    docker build -t cjarmas/mocab-web-services .
+    #    docker push cjarmas/mocab-web-services
+
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v0.1.2
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_PRIVATE_KEY }}
+        script: |
+          echo ¡Hello World SSH!
