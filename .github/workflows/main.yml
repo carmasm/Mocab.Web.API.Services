@@ -24,6 +24,6 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        cd Mocab.Web.API.Services  # Navigate to the directory containing the Dockerfile
+        cd Mocab.Web.Services  # Navigate to the directory containing the Dockerfile
         docker build -t cjarmas/mocab-web-services .
         docker push cjarmas/mocab-web-services
