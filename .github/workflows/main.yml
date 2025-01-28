@@ -19,6 +19,9 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Debug - List Files in Workspace
+      run: ls -alh
+
     - name: Build and Push Docker Image
       run: |
         cd Mocab.Web.API.Services  # Navigate to the directory containing the Dockerfile
