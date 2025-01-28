@@ -22,17 +22,18 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Navigate To Dockerfile Directory
-      run: cd Mocab.Web.Services
+    # - name: Navigate To Dockerfile Directory
+    #  run: cd Mocab.Web.Services
 
     - name: Debug - List Files in Workspace
       run: ls -alh
 
     - name: Build and Push Docker Image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: Dockerfile
-        platforms: linux/arm64
-        push: true
-        tags: cjarmas/mocab-web-services
+      run: |
+        # Navigate to the directory containing the Dockerfile
+        cd Mocab.Web.Services
+
+        # Build and push the multi-platform image
+        docker buildx build --platform linux/arm64 \
+          -t cjarmas/mocab-web-services:latest \
+          --push .
