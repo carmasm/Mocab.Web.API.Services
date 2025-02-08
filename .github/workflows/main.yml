@@ -35,20 +35,26 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PRIVATE_KEY }}
         script: |
+          # Nos ubicamos en el directorio donde está el docker-compose.yml en el servidor
           cd compose
-          
+
+          # Si existe una imagen 'previous', la retageamos a 'previous2'
           if docker image inspect cjarmas/mocab-web-services:previous > /dev/null 2>&1; then
             docker tag cjarmas/mocab-web-services:previous cjarmas/mocab-web-services:previous2
           fi
-          
+
+          # Retagamos la imagen 'latest' actual como 'previous'
           docker tag cjarmas/mocab-web-services:latest cjarmas/mocab-web-services:previous
-          
+
+          # Descargamos la nueva versión de la imagen 'latest' desde Docker Hub
           docker pull cjarmas/mocab-web-services:latest
-          
+
+           # Si existe 'previous2', la eliminamos (limpieza de versiones antiguas)
           if docker image inspect cjarmas/mocab-web-services:previous2 > /dev/null 2>&1; then
             docker image rm cjarmas/mocab-web-services:previous2
           fi
-          
+
+          # Reiniciamos únicamente el contenedor del servicio mocab-web-services
           docker compose stop mocab-web-services
           docker compose rm -f mocab-web-services
           docker compose up -d mocab-web-services
