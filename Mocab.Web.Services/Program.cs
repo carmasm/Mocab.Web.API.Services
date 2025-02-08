@@ -31,11 +31,11 @@ builder.Services.AddDbContext<DataContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
@@ -43,7 +43,7 @@ app.MapIdentityApi<User>();
 
 app.UseAuthorization();
 
-app.Map("/", () => "¡Hello World ASP.NET Core 8 Web API!");
+app.Map("/", () => "Hello World ASP.NET Core 8 Web API!");
 
 app.MapControllers();
 
