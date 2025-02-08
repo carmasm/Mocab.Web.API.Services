@@ -1,0 +1,41 @@
+name: Rollback to Previous Version
+
+on:
+  workflow_dispatch:  # Allows manual execution from GitHub Actions
+
+jobs:
+  rollback:
+    runs-on: ubuntu-22.04-arm
+
+    steps:
+    - name: Connect via SSH and Perform Rollback
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_PRIVATE_KEY }}
+        script: |
+          # Navigate to the Docker Compose directory
+          cd compose
+          
+          # Ensure the 'previous' image exists before proceeding
+          if ! docker image inspect cjarmas/mocab-web-services:previous > /dev/null 2>&1; then
+            echo "No previous image available to rollback!" 
+            exit 1
+          fi
+          
+          # Tag latest as rollback (for safety)
+          docker tag cjarmas/mocab-web-services:latest cjarmas/mocab-web-services:rollback
+          
+          # Tag previous as latest
+          docker tag cjarmas/mocab-web-services:previous cjarmas/mocab-web-services:latest
+
+          # Tag rollback as the new previous
+          docker tag cjarmas/mocab-web-services:rollback cjarmas/mocab-web-services:previous
+                    
+          # Restart the container to use the rollbacked image
+          docker compose stop mocab-web-services
+          docker compose rm -f mocab-web-services
+          docker compose up -d mocab-web-services
+
+          echo "Rollback completed successfully!"
