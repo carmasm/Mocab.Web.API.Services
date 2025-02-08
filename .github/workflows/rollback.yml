@@ -32,6 +32,9 @@ jobs:
 
           # Tag rollback as the new previous
           docker tag cjarmas/mocab-web-services:rollback cjarmas/mocab-web-services:previous
+
+          # Remove the 'rollback' tag to maintain only 'latest' and 'previous'
+          docker rmi cjarmas/mocab-web-services:rollback || true
                     
           # Restart the container to use the rollbacked image
           docker compose stop mocab-web-services
