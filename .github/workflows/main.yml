@@ -22,11 +22,11 @@ jobs:
     - name: Debug - List Files in Workspace
       run: ls -alh
 
-    #- name: Build and Push Docker Image
-    #  run: |
-    #    cd Mocab.Web.Services  # Navigate to the directory containing the Dockerfile
-    #    docker build -t cjarmas/mocab-web-services .
-    #    docker push cjarmas/mocab-web-services
+    - name: Build and Push Docker Image
+      run: |
+        cd Mocab.Web.Services  # Navigate to the directory containing the Dockerfile
+        docker build -t cjarmas/mocab-web-services .
+        docker push cjarmas/mocab-web-services
 
     - name: Deploy via SSH
       uses: appleboy/ssh-action@v1.2.0
@@ -35,4 +35,20 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PRIVATE_KEY }}
         script: |
-          ls -l
+          cd compose
+          
+          if docker image inspect cjarmas/mocab-web-services:previous > /dev/null 2>&1; then
+            docker tag cjarmas/mocab-web-services:previous cjarmas/mocab-web-services:previous2
+          fi
+          
+          docker tag cjarmas/mocab-web-services:latest cjarmas/mocab-web-services:previous
+          
+          docker pull cjarmas/mocab-web-services:latest
+          
+          if docker image inspect cjarmas/mocab-web-services:previous2 > /dev/null 2>&1; then
+            docker image rm cjarmas/mocab-web-services:previous2
+          fi
+          
+          docker compose stop mocab-web-services
+          docker compose rm -f mocab-web-services
+          docker compose up -d mocab-web-services
