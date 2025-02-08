@@ -35,4 +35,4 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PRIVATE_KEY }}
         script: |
-          l -l
+          ls -l
