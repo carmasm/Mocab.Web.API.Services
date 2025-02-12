@@ -4,6 +4,7 @@ using Mocab.Web.Services.Data;
 using Mocab.Web.Services.Data.Entities;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System.Configuration;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowMyOrigin",
+        builder => builder
+            .WithOrigins("http://localhost:8100", "https://gplanethn.ddns.net")
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+//builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+//    .AddCookie(IdentityConstants.ApplicationScheme, options =>
+//    {
+//        options.Cookie.HttpOnly = true;
+//        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+//    });
 
 builder.Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<DataContext>()
@@ -31,19 +48,28 @@ builder.Services.AddDbContext<DataContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
 
+app.UseCors("AllowMyOrigin");
 app.UseHttpsRedirection();
 
 app.MapIdentityApi<User>();
 
+//app.UseAuthentication();
 app.UseAuthorization();
 
-app.Map("/", () => "Hello World Rollback ASP.NET Core 8 Web API!");
+app.Map("/", () => "Hello World ASP.NET Core 8 Web API, Code Bless You!");
+
+app.MapPost("/logout", async (SignInManager<User> signInManager) =>
+{
+    await signInManager.SignOutAsync();
+    return Results.Ok();
+
+}).RequireAuthorization();
 
 app.MapControllers();
 
