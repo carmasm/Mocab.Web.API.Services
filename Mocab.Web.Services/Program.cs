@@ -35,20 +35,20 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
         // Allow the cookie to be sent in cross-site requests
         options.Cookie.SameSite = SameSiteMode.None;
 
-        //// Disable redirect for API calls: instead of redirecting to login, return 401.
-        //options.Events.OnRedirectToLogin = context =>
-        //{
-        //    // For API endpoints, you may want to just return a 401
-        //    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        //    return Task.CompletedTask;
-        //};
+        // Disable redirect for API calls: instead of redirecting to login, return 401.
+        options.Events.OnRedirectToLogin = context =>
+        {
+            // For API endpoints, you may want to just return a 401
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
 
-        //// For logout, instead of redirecting to the login page, return 200.
-        //options.Events.OnRedirectToLogout = context =>
-        //{
-        //    context.Response.StatusCode = StatusCodes.Status200OK;
-        //    return Task.CompletedTask;
-        //};
+        // For logout, instead of redirecting to the login page, return 200.
+        options.Events.OnRedirectToLogout = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status200OK;
+            return Task.CompletedTask;
+        };
         //options.ExpireTimeSpan = TimeSpan.FromHours(8);
     });
 
