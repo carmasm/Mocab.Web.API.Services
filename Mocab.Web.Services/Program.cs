@@ -31,6 +31,10 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     {
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+        // Allow the cookie to be sent in cross-site requests
+        options.Cookie.SameSite = SameSiteMode.None;
+
         // Disable redirect for API calls: instead of redirecting to login, return 401.
         options.Events.OnRedirectToLogin = context =>
         {
