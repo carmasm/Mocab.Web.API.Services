@@ -82,6 +82,27 @@ app.UseAuthorization();
 
 app.Map("/", () => "Hello World ASP.NET Core 8 Web API, Code Bless You!");
 
+app.Use(async (context, next) =>
+{
+    await next();
+
+    // Interceptamos la cabecera Set-Cookie
+    if (context.Response.Headers.TryGetValue("Set-Cookie", out var setCookieHeaders))
+    {
+        var updatedCookies = setCookieHeaders.Select(cookie =>
+        {
+            // Asumiendo que el nombre de la cookie de autenticación es el definido por Identity (ej: ".AspNetCore.Identity.Application")
+            if (cookie.StartsWith(".AspNetCore." + IdentityConstants.ApplicationScheme) && !cookie.Contains("Partitioned"))
+            {
+                return cookie + "; Partitioned";
+            }
+            return cookie;
+        }).ToArray();
+
+        context.Response.Headers["Set-Cookie"] = updatedCookies;
+    }
+});
+
 app.MapPost("/logout", async (SignInManager<User> signInManager) =>
 {
     await signInManager.SignOutAsync();
